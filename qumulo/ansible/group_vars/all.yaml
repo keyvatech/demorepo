@@ -1,0 +1,4 @@
+---
+qumulo_user: "admin"
+qumulo_password: "mypassword"
+qumulo_address: "mycluster.local"
