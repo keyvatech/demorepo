@@ -1,4 +1,96 @@
 ---
 qumulo_user: "admin"
-qumulo_password: "mypassword"
-qumulo_address: "mycluster.local"
+qumulo_password: "myadminpass"
+qumulo_address: "172.22.18.50"
+
+
+#######################################
+# Example config as code below
+# This is unused in demo playbook
+# but this could easily be implemented
+#######################################
+share_permissions:
+  - rights:
+    - READ
+    trustee:
+      name: qumulo-grp2
+    type: ALLOWED
+  - rights:
+    - READ
+    - WRITE
+    trustee:
+      name: qumulo-grp1
+    type: ALLOWED
+  - rights:
+    - ALL
+    trustee:
+      name: quser1
+    type: ALLOWED
+  - rights:
+    - ALL
+    trustee:
+      name: admin
+    type: ALLOWED
+
+smb_shares:
+  share1:
+    permissions: "{{ share_permissions }}"
+    path: "/keyva_demo/my_share"
+    description: "Share for all the things"
+
+snapshot_policies:
+  keyva_demo_daily:
+    creation_schedule:
+      frequency: SCHEDULE_DAILY_OR_WEEKLY
+      hour: 0
+      minute: 0
+      on_days:
+      - SUN
+      - MON
+      - TUE
+      - WED
+      - THU
+      - FRI
+      - SAT
+      timezone: America/Chicago
+    directory: /keyva_demo
+    expiration_time_to_live: 7days
+  keyva_demo_hourly:
+    creation_schedule:
+      fire_every: 60
+      fire_every_interval: FIRE_IN_MINUTES
+      frequency: SCHEDULE_HOURLY_OR_LESS
+      on_days:
+      - SUN
+      - MON
+      - TUE
+      - WED
+      - THU
+      - FRI
+      - SAT
+      timezone: America/Chicago
+      window_end_hour: 23
+      window_end_minute: 59
+      window_start_hour: 0
+      window_start_minute: 0
+    directory: /keyva_demo
+    expiration_time_to_live: 36hours
+  keyva_demo_monthly:
+    creation_schedule:
+      day_of_month: 1
+      frequency: SCHEDULE_MONTHLY
+      hour: 2
+      minute: 0
+      timezone: America/Chicago
+    directory: /keyva_demo
+    expiration_time_to_live: 3months
+  keyva_demo_weekly:
+    creation_schedule:
+      frequency: SCHEDULE_DAILY_OR_WEEKLY
+      hour: 1
+      minute: 0
+      on_days:
+      - SUN
+      timezone: America/Chicago
+    directory: /keyva_demo
+    expiration_time_to_live: 4weeks
